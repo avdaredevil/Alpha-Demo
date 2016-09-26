@@ -66,7 +66,7 @@ block content
             .Song-Holder {text-align: left;margin: .5em;color: black;max-width: 30em;width: 100%;transition: box-shadow .25s}
             .Song-Holder:not(.hidden) {display: inline-flex !Important}
             .Song-Holder>.Img {width: 4em;height:4em;overflow:hidden;margin:0;position: relative}
-            .Song-Holder:not(:hover)>.Img .action {opacity: 0}
+            .Song-Holder:not(:hover):not(.active)>.Img .action {opacity: 0}
             .Song-Holder>.Img>.action {transition: opacity .25s;opacity: 1;background: rgba(0,0,0,.35);color:white;cursor:pointer}
             .Song-Holder.active:not(.paused)>.Img>.action>.fa-play {display: none}
             .Song-Holder.paused>.Img>.action>.fa-pause,.Song-Holder:not(.active)>.Img>.action>.fa-pause {display: none}
