@@ -6,26 +6,12 @@ block meta
     title Easy Classes | 404 Error
 
 block static_imports
-    +PolymerElement("polymer")
-    +PolymerElement("paper-input")
-    +PolymerElement("paper-icon-button")
-    +PolymerElement("iron-form")
-    +PolymerElement("iron-icons")
-    +PolymerElement("iron-icon")
-    +CssFile("/assets/css/animate")
-    +CssFile("/assets/css/style")
-    +FontAwesome
 
 block content
-    template#t(is="dom-bind")
-        section#error.fit.layout.vertical.center-center.animated.fadeInDown
-            h1 404
-            h3.font-bold Page Not Found [#{url.substring(1)}]
-            article.desc Sorry, but the page you are looking for has not been found. Try checking the URL for error, then hit the refresh button on your browser or try found something else in our app.
-            form.horizontal.center.layout(is="iron-form",method="post")
-                paper-input.flex#search_box(label="Search",on-input="expander",required,name="search",minlength=5,maxlength=160,char-counter,error-message="Please enter a valid search",value="{{search}}")
-                paper-icon-button#search_btn(icon="search")
-                div#s_c {{search}}
+    section#error.fit.layout.vertical.center-center.animated.fadeInDown
+        h1 404
+        h3.font-bold Page Not Found [#{url.substring(1)}]
+        article.desc Sorry, but the page you are looking for has not been found. Try checking the URL for error, then hit the refresh button on your browser or try found something else in our app.
         style.
             body {background-color: #463434;color:white}
             #error {max-width: 400px;z-index: 100;margin: 0 auto;padding-top: 40px}
@@ -35,11 +21,3 @@ block content
             #s_c {visibility: hidden;position: absolute;z-index: -1;}
             .font-bold {font-weight: 600}
             .paper-icon-button-0 {background-color: #3F51B5;color: white;border-radius: 50%;margin-left: .5em;}
-        script.
-            template = $("#t")[0]
-            template.expander = function() {
-                text = this.$.search_box.value
-                if (text.length < 10) {this.$.search_box.style["min-width"]="0";return}
-                size = $("#s_c").text(text).width()
-                this.$.search_box.style["min-width"] = Math.min(size*1.35,.75*$(window).width())+"px"
-            }
