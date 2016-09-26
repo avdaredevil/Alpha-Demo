@@ -218,8 +218,8 @@ block content
                 const per = me.currentTime/me.duration*100
                 app.setMusicProgress(per)
             }).bind('ended', _ => {
-                const Next = app.songs[++app.currSong]
-                Next && app.playSong(app.currSong)
+                const i = app.currSong+1, Next = app.songs[i]
+                Next && app.playSong(i)
             }).on('pause play', _ => pm("track"))
             app.$.SearchBox.focus(_ => {app.searchActive=true;pm("search-class")}).blur(_ => {app.searchActive=false;pm("search-class")})
                 .bind("input", e => {location.hash = app.$.SearchBox.val()})
