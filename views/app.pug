@@ -139,7 +139,7 @@ block content
     script.
         var s_d = {palette: !{JSON.stringify(palette)},user: !{JSON.stringify(user)},songs: !{JSON.stringify(songs)}}
     script
-        :babel
+        :uglify-js:babel
             var sleep = t => new Promise(res => setTimeout(res,t))
             var app = {root: $("#app"), $:{},faux:_=>_, arr: a => Array.prototype.slice.apply(a)};
             Object.keys(s_d).forEach(k => {app[k]=s_d[k]});

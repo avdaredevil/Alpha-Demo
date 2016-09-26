@@ -17,15 +17,16 @@ html
         link(href='https://fonts.googleapis.com/css?family=Raleway|Poiret+One|Roboto:400,200,100', rel='stylesheet', type='text/css')
         script(src="/module/jquery/dist/jquery.min.js")
         script(src="https://use.fontawesome.com/9e1074d69a.js")
-        style.
-            html,body,head{border: 0;padding: 0;margin: 0;font-family: 'Roboto', sans-serif;}*{box-sizing:border-box}
-            h1,h2 {font-weight: 200;margin:0}
-            body {color:white;background-color:#363F45}
-            button {cursor:pointer}
-            *::-webkit-scrollbar {width: 8px}
-            *::-webkit-scrollbar-track {background-color: rgba(255,255,255,.08);box-shadow: inset 0 0 6px rgba(255,255,255,0.1)}
-            *::-webkit-scrollbar-thumb {background-color: rgba(255,255,255,.35);transition: background-color .25s}
-            *::-webkit-scrollbar-thumb:hover {background-color: rgba(255,255,255,.45)}
+        style
+            :clean-css
+                html,body,head{border: 0;padding: 0;margin: 0;font-family: 'Roboto', sans-serif;}*{box-sizing:border-box}
+                h1,h2 {font-weight: 200;margin:0}
+                body {color:white;background-color:#363F45}
+                button {cursor:pointer}
+                *::-webkit-scrollbar {width: 8px}
+                *::-webkit-scrollbar-track {background-color: rgba(255,255,255,.08);box-shadow: inset 0 0 6px rgba(255,255,255,0.1)}
+                *::-webkit-scrollbar-thumb {background-color: rgba(255,255,255,.35);transition: background-color .25s}
+                *::-webkit-scrollbar-thumb:hover {background-color: rgba(255,255,255,.45)}
     body#app.fullbleed.layout.vertical
         main.flex.layout.vertical.center-center
             header#TitleWrapper
@@ -43,36 +44,37 @@ html
                 input#psw(type="password",placeholder="Password",name="password")
                 aside#ModalError.layout.vertical.center-center
                 button.fab(onclick="app.submitForm()"): i.fa.fa-check.fa-2x
-        style.
-            #TitleWrapper {text-align:center}
-            #TitleWrapper > h1 {margin: .67em 0;font-size:3em}
-            #TitleWrapper > h1 > small {font-size: .4em}
-            body:not(.modal) > #Modal {display:none;background: rgba(0,0,0,0)}
-            #Success:not(.show) {display:none}
-            #Success {font-size: 1em;position: absolute;left: 50%;transform: translateX(-50%);}
-            #Success > .Text {margin-top: 1em}
-            #Modal {background: rgba(0,0,0,.45);transition: background .5s}
-            #Modal .Modal-Body {padding: 1em 1em 2.5em;position: relative;max-width: 25em;background: rgba(255,255,255,.14);color: white;border-radius: 5px}
-            #Modal .Modal-Body h2 {margin-bottom: 1em}
-            #Modal .Modal-Body input {font-family:Raleway;width: 100%;margin: .25em 0;padding: .5em;font-size: 1em;background: rgba(0, 0, 0, 0.42);color: white;outline: none;border: 0;transition: box-shadow .25s}
-            #Modal .Modal-Body input:focus {box-shadow: inset 0 0 8px 0px rgba(0,0,0,.43)}
-            #Modal .Modal-Body input.Invalid {box-shadow: 0 0 9px 1px #fb3f31}
-                .Modal-Body.login input[name='name'] {display:none}
-                .Modal-Body .fab {padding: .9em;border-radius: 50%;border: 0;background-color: #F44336;color: white;position: absolute;bottom: 0;right: 1em;transform: translateY(50%)}
-            #ModalError:not(.show) {height:0}
-            #ModalError {padding: 0 1em;transition: height .35s;overflow: hidden;height: 5em;margin-top: .15em;color: white;background: rgba(244, 67, 54, 0.58);font-size: .9em;text-align: center}
-            .fab {transition:box-shadow .25s;cursor:pointer;outline: 0;box-shadow: !{Elevation[1]}}
-            .fab:focus {box-shadow: !{Elevation[2]}}
-            .fab:active {box-shadow: !{Elevation[4]}}
-            .el-1 {box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12),0 3px 1px -2px rgba(0,0,0,.2)}
-            .el-2 {box-shadow: 0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12),0 3px 5px -1px rgba(0,0,0,.4)}
-            body.modal > main {filter: blur(3px)}
-            #Error {background-color: rgba(255,0,0,.45)}
-            #Login {position:absolute;top:1em;right:1em;color: #B7B7B7;border:0;padding:.5em 1em;outline:none;background:transparent;font-size:1em;text-transform: uppercase;transition: background-color .25s}
-            #Login:active {box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.3)}
-            #Login:hover {background: rgba(255, 255, 255, 0.08)}
+        style
+            |.fab {transition:box-shadow .25s;cursor:pointer;outline: 0;box-shadow: !{Elevation[1]}}
+            |.fab:focus {box-shadow: !{Elevation[2]}}
+            |.fab:active {box-shadow: !{Elevation[4]}}
+            :clean-css
+                #TitleWrapper {text-align:center}
+                #TitleWrapper > h1 {margin: .67em 0;font-size:3em}
+                #TitleWrapper > h1 > small {font-size: .4em}
+                body:not(.modal) > #Modal {display:none;background: rgba(0,0,0,0)}
+                #Success:not(.show) {display:none}
+                #Success {font-size: 1em;position: absolute;left: 50%;transform: translateX(-50%);}
+                #Success > .Text {margin-top: 1em}
+                #Modal {background: rgba(0,0,0,.45);transition: background .5s}
+                #Modal .Modal-Body {padding: 1em 1em 2.5em;position: relative;max-width: 25em;background: rgba(255,255,255,.14);color: white;border-radius: 5px}
+                #Modal .Modal-Body h2 {margin-bottom: 1em}
+                #Modal .Modal-Body input {font-family:Raleway;width: 100%;margin: .25em 0;padding: .5em;font-size: 1em;background: rgba(0, 0, 0, 0.42);color: white;outline: none;border: 0;transition: box-shadow .25s}
+                #Modal .Modal-Body input:focus {box-shadow: inset 0 0 8px 0px rgba(0,0,0,.43)}
+                #Modal .Modal-Body input.Invalid {box-shadow: 0 0 9px 1px #fb3f31}
+                    .Modal-Body.login input[name='name'] {display:none}
+                    .Modal-Body .fab {padding: .9em;border-radius: 50%;border: 0;background-color: #F44336;color: white;position: absolute;bottom: 0;right: 1em;transform: translateY(50%)}
+                #ModalError:not(.show) {height:0}
+                #ModalError {padding: 0 1em;transition: height .35s;overflow: hidden;height: 5em;margin-top: .15em;color: white;background: rgba(244, 67, 54, 0.58);font-size: .9em;text-align: center}
+                .el-1 {box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12),0 3px 1px -2px rgba(0,0,0,.2)}
+                .el-2 {box-shadow: 0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12),0 3px 5px -1px rgba(0,0,0,.4)}
+                body.modal > main {filter: blur(3px)}
+                #Error {background-color: rgba(255,0,0,.45)}
+                #Login {position:absolute;top:1em;right:1em;color: #B7B7B7;border:0;padding:.5em 1em;outline:none;background:transparent;font-size:1em;text-transform: uppercase;transition: background-color .25s}
+                #Login:active {box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.3)}
+                #Login:hover {background: rgba(255, 255, 255, 0.08)}
         script
-            :babel
+            :uglify-js:babel
                 var sleep = t => new Promise(res => setTimeout(res,t))
                 var app = {root: $("#app"), $:{},faux:_=>_,arr: a => Array.prototype.slice.apply(a)};
                 //======STATIC=BINDING===========================|

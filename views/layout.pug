@@ -24,12 +24,13 @@ html
     script(src="/module/jquery/dist/jquery.min.js")
     script(src="https://use.fontawesome.com/9e1074d69a.js")
     block js_imports
-    style.
-        body,head,background {margin:0;padding:0;border:0;font-family: "Roboto"}
-        .div {margin: 2em 0 0} * {box-sizing:border-box}
-        html,body,head{border: 0;padding: 0;margin: 0;font-family: 'Roboto', sans-serif;}*{box-sizing:border-box}
-        h1,h2,h3,h4 {font-weight: 200;margin:0}
-        body {color:white;background-color:#363F45}
-        button {cursor:pointer}
+    style
+        :clean-css
+            body,head,background {margin:0;padding:0;border:0;font-family: "Roboto"}
+            .div {margin: 2em 0 0} * {box-sizing:border-box}
+            html,body,head{border: 0;padding: 0;margin: 0;font-family: 'Roboto', sans-serif;}*{box-sizing:border-box}
+            h1,h2,h3,h4 {font-weight: 200;margin:0}
+            body {color:white;background-color:#363F45}
+            button {cursor:pointer}
   body#app.fullbleed.layout.vertical
     block content
