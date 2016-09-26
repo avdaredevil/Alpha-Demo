@@ -196,7 +196,7 @@ block content
                     processData: false
                 });
             }
-            app.__uploadReader = e => e.lengthComputable && app.setUploadProgress(e.loaded/e.total)
+            app.__uploadReader = e => e.lengthComputable && app.setUploadProgress(e.loaded/e.total*100)
             app.setUploadProgress = p => app.$.uploadProgress.css({width: p+"%"})
             app.setMusicProgress = p => {app.$.musicProgress.css({width: p+"%"}).next().css({left: p+"%"})}
             //======STATIC=DATA==============================|
