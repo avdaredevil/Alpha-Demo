@@ -1,0 +1,46 @@
+<style>
+    .ripple {position:relative;overflow:hidden}
+    .ink {
+        display: block; position: absolute;
+        background: rgba(255,255,255,.25); /*hsl(180, 40%, 80%)*/
+        border-radius: 100%;
+        transform: scale(0);
+    }
+    /*animation effect*/
+    .ink.animate {animation: ripple 0.65s linear;}
+    @keyframes ripple {
+        /*scale the element to 250% to safely cover the entire link and fade it out*/
+        100% {opacity: 0; transform: scale(2.5);}
+    }
+</style>
+<script>
+    (_ => {
+        var parent, ink, d, x, y;
+        $(".ripple").mousedown(function(e){
+            parent = $(this);const isCenter = parent.hasClass("ripple-center")
+            //create .ink element if it doesn't exist
+            if(parent.find(".ink").length == 0)
+                parent.prepend("<span class='ink'></span>");
+                
+            ink = parent.find(".ink");
+            //incase of quick double clicks stop the previous animation
+            ink.removeClass("animate");
+            
+            //set size of .ink
+            if(!ink.height() && !ink.width())
+            {
+                //use parent's width or height whichever is larger for the diameter to make a circle which can cover the entire element.
+                d = Math.max(parent.outerWidth(), parent.outerHeight());
+                ink.css({height: d, width: d});
+            }
+            
+            //get click coordinates
+            //logic = click coordinates relative to page - parent's position relative to page - half of self height/width to make it controllable from the center;
+            x = e.pageX - parent.offset().left - ink.width()/2;
+            y = e.pageY - parent.offset().top - ink.height()/2;
+            
+            //set the position and add class .animate
+            ink.css({top: isCenter?0+'%':y+'px', left: isCenter?0+'%':x+'px'}).addClass("animate");
+        })
+    })()
+</script>

@@ -1,0 +1,19 @@
+{
+    "Version":  "1.0.0",
+    "Name":  "Alpha-DemoServer",
+    "Authors":  [
+                    "Apoorv Verma [AP] \u003cavdaredevil@gmail.com\u003e"
+                ],
+    "Node-Agent":  "nodemon",
+    "Config":  {
+                   "DB":  ".\\data",
+                   "Node-Path":  ".\\bin\\www",
+                   "DBName":  "Alpha"
+               },
+    "DateUpdated":  {
+                        "value":  "\/Date(1473714813401)\/",
+                        "DisplayHint":  2,
+                        "DateTime":  "Monday, September 12, 2016 5:13:33 PM"
+                    },
+    "Port":  3000
+}

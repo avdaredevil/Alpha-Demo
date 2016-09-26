@@ -1,0 +1,233 @@
+extends layout
+
+block static_imports
+    +GoogleFont("Poiret One|Raleway")
+block js_imports
+    link(rel="import", href="/assets/ripple.html")
+block content
+    - 
+      var processTime = t => {
+          const fl = r => Math.floor(r)
+          const [hr,min,sec] = [fl(t/60/60),fl(t/60),t%60]
+          return (hr?hr+":":'')+(min?min+":":'')+("00"+sec).slice(-2)
+      }
+
+    //- Passed Palette styles
+    style.
+        body {background-color: #{palette.bg}}
+        #Toolbar {background-color: #{palette.primary};box-shadow: #{Elevation[1]}}
+        .fab {box-shadow: !{Elevation[1]}}
+        .fab:focus {box-shadow: !{Elevation[2]}}
+        .fab:active {box-shadow: !{Elevation[4]}}
+        .card {box-shadow: !{Elevation[2]}}
+        .mc {color: !{palette.music}}
+        .pr {background-color: #{palette.primary} !important}
+        .Song-Holder.active {box-shadow: !{Elevation[4]}}
+        .Music-Player>.Controls>.Search-Wrapper.active {box-shadow: !{Elevation[3]}}
+    style
+        :clean-css
+            #Toolbar {color: white;height: 3.5em;padding: 0 1em;position:relative}
+            #Toolbar > .Log-Out {cursor:pointer;margin-left: 1em;border: 2px solid rgba(255, 255, 255, 0.55);padding: .65em;border-radius: 50%;background-color: transparent;transition: background-color .25s}
+            #Toolbar > .Log-Out:hover {background: rgba(255,255,255,.35)}
+            .fab {padding: .9em;font-size: 1em;border-radius: 50%;border: 0;background-color: #F44336;color: white;position: absolute;bottom: 3vh;right: 3vw;transition:box-shadow .25s;cursor:pointer;outline: 0}
+            .share-fab {right: 6em;right: calc(4vw + 4em)}
+            .progress {z-index:1;width:100%;height: .3em;position:absolute;bottom:0;left:0}
+            .progress > .primary {display: inline-block;position: absolute;width: 0%;top: 0;left: 0;height: 100%;transition: width .25s linear;background: #607d8b}
+            .card {background: white;display: inline-block;padding: .25em}
+            main > .Content {overflow-x: hidden}
+            main > .Content > .Song-List {width: 100%;height: 65%;text-align: center;padding: 1em 2vw 6em;overflow: auto}
+            main > .Content > .Music-Player {height: 35%;margin:0;background-size: cover;transition: height .25s;animation: backgroundRoller 100s infinite linear}
+            body:not(.modal) > #Modal {display:none;background: rgba(0,0,0,0)}
+            body.modal > main {filter: blur(3px)}
+            #Modal {background: rgba(0,0,0,.45);transition: background .5s}
+            body.modal.share > #Modal > .share,body.modal.upload > #Modal > .upload {display:initial}
+            #Modal > .Modal-Body {display:none;padding: 1em 1em 2.5em;position: relative;width:90%;max-width: 25em;background: white;color: black;border-radius: 5px}
+            #Modal > .Modal-Body h2 {margin-bottom: 1em}
+            #Modal > .Modal-Body input {font-family:Raleway;width: 100%;margin: .25em 0;padding: .5em;font-size: 1em;background: rgba(0, 0, 0, 0.42);color: white;outline: none;border: 0;transition: box-shadow .25s}
+            #Modal > .Modal-Body input:focus {box-shadow: inset 0 0 8px 0px rgba(0,0,0,.43)}
+            #Modal > .Modal-Body input.Invalid {box-shadow: 0 0 9px 1px #fb3f31}
+            #Modal > .Modal-Body.share #ShareLink {padding: 1em;background: gainsboro;color: #7199FF}
+                .Modal-Body.login input[name='name'] {display:none}
+            .hidden {display:none !important}
+            .span {width: 100%}
+            img {display:block}
+            .Music-Player {position:relative}
+            .Music-Player:not(.hasData) {height: 0em !important;overflow:hidden}
+            .Music-Player>.Controls {position:absolute;bottom:0;width:100%}
+            .Music-Player>.Controls>.Search-Wrapper {font-size: 1.2em;color:white;position: absolute;top: 2em;left:50%;width: 90%;max-width: 30em;transform:translateX(-50%);padding: .7em;background: rgba(255, 255, 255, 0.19);border-radius: 8px;font-family: Raleway;transition: color .25s, background-color .25s}
+            .Music-Player>.Controls>.Search-Wrapper.active {color:black; background-color: rgba(255, 255, 255, 0.74)}
+            .Music-Player>.Controls>.Search-Wrapper>#SearchBox {font: inherit;outline: none;color: inherit;background: transparent;border: 0}
+            .Music-Player>.Controls>.Search-Wrapper>i {margin-left: 1em}
+            .Music-Player>.Controls>.trackpad {transform:translateY(100%);transition: height .25s}
+            .Music-Player>.Controls>.trackpad:hover {height: .6em}
+            .Music-Player>.Controls>.trackpad>.primary {background: #7ebfb6}
+            .Music-Player>.Controls>.trackpad>.knob {top: 50%;position: absolute;transform: translate(-50%,-50%);color: #607d8b;transition: left .25s linear, opacity .25s;opacity: 1}
+            .Music-Player:not(:hover)>.Controls>.trackpad>.knob {opacity: 0}
+            .Song-Holder {text-align: left;margin: .5em;color: black;max-width: 30em;width: 100%;transition: box-shadow .25s}
+            .Song-Holder:not(.hidden) {display: inline-flex !Important}
+            .Song-Holder>.Img {width: 4em;height:4em;overflow:hidden;margin:0;position: relative}
+            .Song-Holder>.Img:not(:hover) .action {opacity: 0}
+            .Song-Holder>.Img>.action {transition: opacity .25s;opacity: 1;background: rgba(0,0,0,.35);color:white;cursor:pointer}
+            .Song-Holder>.Body {padding: 0 1em;font-family: "Poiret One"}
+            .Song-Holder>.Body>* {font-weight: 800}
+            .Song-Holder>.Body>h3 {font-size: 1.4em}
+            .Song-Holder>.Body>h4 {color: #d6d6d6}
+            .Song-Holder>.Body>h4>.artist:empty:before {content: "Unknown Artist"}
+            .Song-Holder>.Body>h4>.album:not(:empty):before {content: " | "}
+            .Song-Holder>.Meta>.by {font-style: italic;opacity: .7;font-size: .9em}
+            .Song-Holder>.Meta>.by:before {content: "By: "}
+            .Song-Holder>.Meta>.duration {text-align:right}
+            .Song-Holder>.Meta>.duration>i {margin-right: .5em}
+            .Song-List:empty:before {content: "No Songs Yet!";font-size: 7vw;text-align: center;width: 100%;display: inline-block;font-family: Poiret One;color: #7199ff;position: absolute;top: 50%;left: 0;transform: translateY(-50%)}
+            @keyframes backgroundRoller {
+                0%   {background-position-y: 0%;}
+                25%  {background-position-y: 50%;}
+                50%  {background-position-y: 100%;}
+                75%  {background-position-y: 50%;}
+                100% {background-position-y: 0%;}
+            }
+            @media all and (max-width: 515px) {
+                .Song-Holder {margin: .5em 0}
+            }
+    main.flex.layout.vertical
+        header#Toolbar.layout.horizontal
+            h1.logo.self-center MusicEx
+            .flex
+            h4.self-center #{user.fullName}
+            i.Log-Out.fa.fa-sign-out.self-center(onclick="app.logout()")
+            .progress
+                #uploadProgress.primary
+        footer.Content.flex.layout.vertical
+            figure.Music-Player
+                .Controls.fit
+                    header.Search-Wrapper.layout.horizontal.center-center
+                        input#SearchBox.flex(placeholder="Search...")
+                        i.fa.fa-search
+                    footer.trackpad.progress
+                        #musicProgress.primary
+                        i.fa.fa-circle.knob
+                audio#trackPlayer(autoplay)
+            section.Song-List.flex
+                each song,i in songs
+                    article.Song-Holder.card.layout.horizontal(index=i)
+                        figure.Img.ripple.self-center
+                            img.span(src=song.picture)
+                            aside.action.fit.layout.vertical.center-center(onclick="app.playSong("+i+")")
+                                i.fa.fa-play.fa-2x
+                        header.Body.mc.flex.layout.vertical.around-justified
+                            h3=song.title
+                            h4 #[span.artist=song.artist]#[span.album=song.album]
+                        footer.Meta.mc.layout.vertical.around-justified
+                            .by=song.user.fullName
+                            .duration
+                                i.fa.fa-clock-o
+                                span.dur=processTime(song.duration)
+        aside.fab.ripple(onclick="app.uploadModal()")
+            i.fa.fa-upload.fa-2x
+        aside.share-fab.fab.ripple.pr(onclick="app.shareModal()")
+            i.fa.fa-share.fa-2x
+    footer#Modal.fit.layout.vertical.center-center
+        section.Modal-Body.share
+            h2 Share current results:
+            div#ShareLink
+    input#uploadButton.hidden(type="file")
+    //- Import Server Data
+    script.
+        var s_d = {palette: !{JSON.stringify(palette)},user: !{JSON.stringify(user)},songs: !{JSON.stringify(songs)}}
+    script
+        :babel
+            var sleep = t => new Promise(res => setTimeout(res,t))
+            var app = {root: $("#app"), $:{},faux:_=>_, arr: a => Array.prototype.slice.apply(a)};
+            Object.keys(s_d).forEach(k => {app[k]=s_d[k]});
+            //======STATIC=BINDING===========================|
+            ["Modal","uploadButton","uploadProgress","ShareLink","trackPlayer","musicProgress","SearchBox"].forEach(i => {app.$[i] = $("#"+i,app.root)})
+            //======FUNCTIONAL===============================|
+            const pm = app.propogateModal = sec => {
+                const force = !sec;
+                (force || sec=="track") && $(".Song-Holder").not($(".Song-Holder[index="+app.currSong+"]").addClass("active")).removeClass("active");
+                (force || sec=="search-class") && app.$.SearchBox.parent()[(app.searchActive?"add":"remove")+"Class"]("active");
+            }
+            app.uploadModal = _ => {app.$.uploadButton.click()}
+            app.shareModal = _ => {
+                app.$.ShareLink.text(window.location)
+                app.root.addClass("modal share")
+            }
+            app.logout = _ => {window.location="/sign-out"}
+            app.closeModal = _ => ["modal","share","upload"].forEach(c => app.root.removeClass(c))
+            app.search = _ => {}
+            app.playSong = i => {
+                $(".Song-Holder[index="+i+"]",app.root).addClass("current")
+                const song = app.songs[i]
+                const trp = app.$.trackPlayer[0]
+                trp.src = "/api/playMusic/"+song._id
+                app.currSong = i
+                app.loadPlayerMeta(song);pm("track")
+                trp.play()
+            }
+            app.loadPlayerMeta = s => {
+                const pl = $(".Music-Player").addClass("hasData");
+                pl.css("background-image", `url(${(!(s.artistPic.indexOf("gravatar")+1) && s.artistPic) || s.picture || s.artistPic || "none"})`)
+            }
+            app._uploadFile = f => {
+                const payload = new FormData()
+                payload.append("musicFile",f)
+                $.ajax({
+                    url: '/api/uploadMusic',
+                    type: 'POST',
+                    xhr: function() {
+                        var myXhr = $.ajaxSettings.xhr();
+                        if(myXhr.upload){myXhr.upload.addEventListener('progress',app.__uploadReader, false)}
+                        return myXhr;
+                    },
+                    success: data => {window.location = "/"},
+                    error: x => {alert(JSON.parse(x.responseText).message)},
+                    data: payload,
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                });
+            }
+            app.__uploadReader = e => e.lengthComputable && app.setUploadProgress(e.loaded/e.total)
+            app.setUploadProgress = p => app.$.uploadProgress.css({width: p+"%"})
+            app.setMusicProgress = p => {app.$.musicProgress.css({width: p+"%"}).next().css({left: p+"%"})}
+            //======STATIC=DATA==============================|
+            app.state = "Log In"
+            //======EVENT=BINDING============================|
+            app.$.Modal.click(e => {
+                if (!app.root.hasClass("modal")) {return}
+                if (!$(e.target).closest($(".Modal-Body", app.$.Modal)).length) {app.closeModal()}
+            })
+            app.$.uploadButton.change(_ => {
+                const me = app.$.uploadButton[0], file = me.files[0]
+                const {size} = me
+                if (!file) {return}
+                if (!/\.mp3$/i.test(file.name)) {alert("Invalid File passed! Only Mp3's allowed");return}
+                app._uploadFile(file)
+            })
+            app.$.trackPlayer.bind("timeupdate", _ => {
+                const me = app.$.trackPlayer[0]
+                const per = me.currentTime/me.duration*100
+                app.setMusicProgress(per)
+            }).bind('ended', _ => {
+                const Next = app.songs[++app.currSong]
+                Next && app.playSong(app.currSong)
+            })
+            app.$.SearchBox.focus(_ => {app.searchActive=true;pm("search-class")}).blur(_ => {app.searchActive=false;pm("search-class")})
+                .bind("input", e => {location.hash = app.$.SearchBox.val()})
+            app.$.musicProgress.parent().click(e => {
+                const me = app.$.musicProgress.parent(), player = app.$.trackPlayer[0]
+                const ratio = (e.pageX - me.offset().left)/me.width()
+                if (!player.currentTime) {return}
+                player.currentTime = ratio*player.duration
+            })
+            $(window).bind('hashchange', e => {
+                const query = location.hash.slice(1)
+                const all = $(".Song-Holder")
+                if (!query) {all.removeClass("hidden")}
+                all.not(all.filter((i,e) => {
+                    const song = app.songs[i], reg = new RegExp(query,'ig'), t = s => reg.test(s);
+                    return t(song.title) || t(song.album) || t(song.artist) || t(song.user.fullName)
+                }).removeClass("hidden")).addClass("hidden")
+            });
+            //======INITIALIZERS=============================|
+            pm();app.$.SearchBox.val(location.hash.slice(1));$(window).trigger("hashchange")

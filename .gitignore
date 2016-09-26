@@ -1,0 +1,10 @@
+## Directories
+node_modules/
+bower_components/
+data/
+venv/
+Lol/
+*.ps1
+*.swp
+*.swo
+.DS_Store
