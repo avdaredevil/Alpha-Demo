@@ -68,6 +68,8 @@ block content
             .Song-Holder>.Img {width: 4em;height:4em;overflow:hidden;margin:0;position: relative}
             .Song-Holder>.Img:not(:hover) .action {opacity: 0}
             .Song-Holder>.Img>.action {transition: opacity .25s;opacity: 1;background: rgba(0,0,0,.35);color:white;cursor:pointer}
+            .Song-Holder.active:not(.paused)>.Img>.action>.fa-play {display: none}
+            .Song-Holder.paused>.Img>.action>.fa-pause,.Song-Holder:not(.active)>.Img>.action>.fa-pause {display: none}
             .Song-Holder>.Body {padding: 0 1em;font-family: "Poiret One"}
             .Song-Holder>.Body>* {font-weight: 800}
             .Song-Holder>.Body>h3 {font-size: 1.4em}
@@ -114,6 +116,7 @@ block content
                             img.span(src=song.picture)
                             aside.action.fit.layout.vertical.center-center(onclick="app.playSong("+i+")")
                                 i.fa.fa-play.fa-2x
+                                i.fa.fa-pause.fa-2x
                         header.Body.mc.flex.layout.vertical.around-justified
                             h3=song.title
                             h4 #[span.artist=song.artist]#[span.album=song.album]
@@ -143,8 +146,12 @@ block content
             ["Modal","uploadButton","uploadProgress","ShareLink","trackPlayer","musicProgress","SearchBox"].forEach(i => {app.$[i] = $("#"+i,app.root)})
             //======FUNCTIONAL===============================|
             const pm = app.propogateModal = sec => {
-                const force = !sec;
-                (force || sec=="track") && $(".Song-Holder").not($(".Song-Holder[index="+app.currSong+"]").addClass("active")).removeClass("active");
+                const force = !sec, trk = app.$.trackPlayer[0]
+                if (force || sec=="track") {
+                    const tr = $(".Song-Holder[index="+app.currSong+"]").addClass("active")
+                    $(".Song-Holder").not(tr).removeClass("active").removeClass("paused");
+                    tr[(trk.paused?"add":"remove")+"Class"]("paused")
+                }
                 (force || sec=="search-class") && app.$.SearchBox.parent()[(app.searchActive?"add":"remove")+"Class"]("active");
             }
             app.uploadModal = _ => {app.$.uploadButton.click()}
@@ -156,13 +163,14 @@ block content
             app.closeModal = _ => ["modal","share","upload"].forEach(c => app.root.removeClass(c))
             app.search = _ => {}
             app.playSong = i => {
+                const trp = app.$.trackPlayer[0]
+                if (i == app.currSong) {trp[trp.paused?"play":"pause"]();pm("track");return}
                 $(".Song-Holder[index="+i+"]",app.root).addClass("current")
                 const song = app.songs[i]
-                const trp = app.$.trackPlayer[0]
                 trp.src = "/api/playMusic/"+song._id
                 app.currSong = i
-                app.loadPlayerMeta(song);pm("track")
-                trp.play()
+                app.loadPlayerMeta(song)
+                trp.play().then(_ => pm("track"))
             }
             app.loadPlayerMeta = s => {
                 const pl = $(".Music-Player").addClass("hasData");
