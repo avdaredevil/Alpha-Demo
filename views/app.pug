@@ -113,8 +113,8 @@ block content
             section.Song-List.flex
                 each song,i in songs
                     article.Song-Holder.noselect.card.layout.horizontal(index=i)
-                        figure.Img.ripple.self-center
-                            img.span(src=song.picture)
+                        figure.Img.ripple.self-center.layout.horizontal
+                            img.span.self-center(src=song.picture)
                             aside.action.fit.layout.vertical.center-center(onclick="app.playSong("+i+")")
                                 i.fa.fa-play.fa-2x
                                 i.fa.fa-pause.fa-2x
