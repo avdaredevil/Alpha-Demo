@@ -27,7 +27,7 @@ SongSchema.set("toObject",{virtuals: true})
 
 const fileNameGen = t => t.replace(/\W|\.mp3/g,'')+Math.random()+Date.now()
 SongSchema.statics.makeNew = function(fileData, user, done){
-    const ob = {}, file = fileData.path
+    const ob = {}, file = fileData.path, imagePath = "./musicFiles/img/"
     new Promise(res => {
         audio(fs.createReadStream(file), {duration: true}, (err, meta) => {
             if (err) {return done(err)}
@@ -37,7 +37,8 @@ SongSchema.statics.makeNew = function(fileData, user, done){
             if (ob.year.length != 4) {ob.year = (''+ob.year).replace(/\D/g,'').slice(0,4)}
             ob.artist = meta.albumartist[0] || meta.artist[0]
             ob.genre = meta.genre[0]
-            const name = "./musicFiles/img/"+fileNameGen(ob.title)
+            if (!fs.existsSync(imagePath)){fs.mkdirSync(imagePath)}
+            const name = imagePath+fileNameGen(ob.title)
             if (meta.picture.length) {
                 fs.writeFile(name, meta.picture[0].data, (err,done) => {
                     if (err) {console.log(err);return done(err)}
