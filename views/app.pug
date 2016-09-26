@@ -218,7 +218,8 @@ block content
                 const per = me.currentTime/me.duration*100
                 app.setMusicProgress(per)
             }).bind('ended', _ => {
-                const i = app.currSong+1, Next = app.songs[i]
+                var i=app.currSong,Next;
+                do {i++;Next = app.songs[i]} while (!$(".Song-Holder:not(.hidden)[index="+i+"]").length && (console.log($(".Song-Holder:not(.hidden)[index="+i+"]").length), i < app.songs.length))
                 Next && app.playSong(i)
             }).on('pause play', _ => pm("track"))
             app.$.SearchBox.focus(_ => {app.searchActive=true;pm("search-class")}).blur(_ => {app.searchActive=false;pm("search-class")})
