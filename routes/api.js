@@ -120,9 +120,9 @@ router.get('/listData', Auth.isLoggedIn, function(req, res) {
 
 WriteAP(">>+/rmDB")
 router.get('/rmDB', Auth.isLoggedIn, function(req, res) {
-    User.remove({}, function(err) { 
+    Song.remove({}, function(err) { 
         if (err) {return APIError(res,err)}
-        return APISucc(res,"Removed all music entries")
+        return APISucc(res,{message: "Removed all music entries"})
     })
 })
 //=============================================|
