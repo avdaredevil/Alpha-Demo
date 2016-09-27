@@ -66,11 +66,10 @@ block content
             .Music-Player>.Controls>.Track-Controls:hover>i.prev {left: 40%;left: calc(50% - 4.5em)}
             .Music-Player>.Controls>.Track-Controls:hover>i.next {left: 60%;left: calc(50% + 4.5em)}
             .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
-            .Music-Player.noNext>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% + 2.5em)}
-            .Music-Player.noPrev>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% - 2.5em)}
+            .Music-Player.noNext:not(.noPrev)>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% + 2.5em)}
+            .Music-Player.noPrev:not(.noNext)>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% - 2.5em)}
             .Music-Player.noNext>.Controls>.Track-Controls:hover>i.prev {left: calc(50% - 2.5em)}
             .Music-Player.noPrev>.Controls>.Track-Controls:hover>i.next {left: calc(50% + 2.5em)}
-            .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
             .Music-Player.noPrev>.Controls>.Track-Controls>i.prev {opacity:0;visibility:hidden}
             .Music-Player.noNext>.Controls>.Track-Controls>i.next {opacity:0;visibility:hidden}
             .Music-Player:not(.paused)>.Controls>.Track-Controls>i.fa-play {display:none}
@@ -181,8 +180,8 @@ block content
                     const tr = $(".Song-Holder[index="+app.currSong+"]").addClass("active")
                     $(".Song-Holder").not(tr).removeClass("active").removeClass("paused");
                     [tr,mp].forEach(e => e[(trk.paused?"add":"remove")+"Class"]("paused"))
-                    mp[boolClass(!app.currSong)]("noPrev");
-                    mp[boolClass(app.currSong>=app.songs.length-1)]("noNext");
+                    mp[boolClass(!app._findAvailableSong(-1).song)]("noPrev");
+                    mp[boolClass(!app._findAvailableSong(+1).song)]("noNext");
                 }
                 (force || sec=="search-class") && app.$.SearchBox.parent()[(app.searchActive?"add":"remove")+"Class"]("active");
             }
@@ -193,7 +192,6 @@ block content
             }
             app.logout = _ => {window.location="/sign-out"}
             app.closeModal = _ => ["modal","share","upload"].forEach(c => app.root.removeClass(c))
-            app.search = _ => {}
             app.playSong = i => new Promise(res => {
                 const trp = app.$.trackPlayer[0]
                 if (i == app.currSong) {trp[trp.paused?"play":"pause"]();return}
@@ -205,14 +203,17 @@ block content
                 trp.play().then(_ => pm("track")).then(res)
             })
             app.playPrev = _ => {
-                var i=app.currSong,Next;
-                do {i--;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
-                Next && app.playSong(i)
+                const ob = app._findAvailableSong(-1)
+                ob.song && app.playSong(ob.i)
             }
             app.playNext = _ => {
+                const ob = app._findAvailableSong(1)
+                ob.song && app.playSong(ob.i)
+            }
+            app._findAvailableSong = it => {
                 var i=app.currSong,Next;
-                do {i++;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
-                Next && app.playSong(i)
+                do {i+=it;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
+                return {i:i, song: Next}
             }
             app.loadPlayerMeta = s => {
                 const pl = $(".Music-Player").addClass("hasData");
@@ -275,6 +276,7 @@ block content
                     const song = app.songs[i], reg = new RegExp(query,'ig'), t = s => reg.test(s);
                     return t(song.title) || t(song.album) || t(song.artist) || t((song.user||[]).fullName)
                 }).removeClass("hidden")).addClass("hidden")
+                pm("track")
             });
             //======INITIALIZERS=============================|
             app.interval = setInterval(_ => app.scrollArtistPics && app.loadPlayerMeta(app.songs[(app.currSong+app.i++)%app.songs.length]),2000)
