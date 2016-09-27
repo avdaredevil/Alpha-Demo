@@ -66,6 +66,11 @@ block content
             .Music-Player>.Controls>.Track-Controls:hover>i.prev {left: 40%;left: calc(50% - 4.5em)}
             .Music-Player>.Controls>.Track-Controls:hover>i.next {left: 60%;left: calc(50% + 4.5em)}
             .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
+            .Music-Player.noNext>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% + 2.5em)}
+            .Music-Player.noPrev>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% - 2.5em)}
+            .Music-Player.noNext>.Controls>.Track-Controls:hover>i.prev {left: calc(50% - 2.5em)}
+            .Music-Player.noPrev>.Controls>.Track-Controls:hover>i.next {left: calc(50% + 2.5em)}
+            .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
             .Music-Player.noPrev>.Controls>.Track-Controls>i.prev {opacity:0;visibility:hidden}
             .Music-Player.noNext>.Controls>.Track-Controls>i.next {opacity:0;visibility:hidden}
             .Music-Player:not(.paused)>.Controls>.Track-Controls>i.fa-play {display:none}
@@ -125,10 +130,10 @@ block content
                         input#SearchBox.flex(placeholder="Search...")
                         i.fa.fa-search
                     header.Track-Controls
-                        i.prev.fa.fa-step-backward(onclick="app.playPrev()")
+                        i.prev.nav.fa.fa-step-backward(onclick="app.playPrev()")
                         i.state.fa.fa-play(onclick="app.playSong(app.currSong)")
                         i.state.fa.fa-pause(onclick="app.playSong(app.currSong)")
-                        i.next.fa.fa-step-forward(onclick="app.playNext()")
+                        i.next.nav.fa.fa-step-forward(onclick="app.playNext()")
                     footer.trackpad.progress
                         #musicProgress.primary
                         i.fa.fa-circle.knob
