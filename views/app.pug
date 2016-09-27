@@ -26,7 +26,7 @@ block content
         .Music-Player>.Controls>.Search-Wrapper.active {box-shadow: !{Elevation[3]}}
     style
         :clean-css
-            #Toolbar {color: white;height: 3.5em;padding: 0 1em;position:relative}
+            #Toolbar {color: white;height: 3.5em;padding: 0 1em;position:relative;opacity: 1;transition: opacity .25s}
             #Toolbar > .Log-Out {cursor:pointer;margin-left: 1em;border: 2px solid rgba(255, 255, 255, 0.55);padding: .65em;border-radius: 50%;background-color: transparent;transition: background-color .25s}
             #Toolbar > .Log-Out:hover {background: rgba(255,255,255,.35)}
             .fab {padding: .9em;font-size: 1em;border-radius: 50%;border: 0;background-color: #F44336;color: white;position: absolute;bottom: 3vh;right: 3vw;transition:box-shadow .25s;cursor:pointer;outline: 0}
@@ -35,8 +35,8 @@ block content
             .progress > .primary {display: inline-block;position: absolute;width: 0%;top: 0;left: 0;height: 100%;transition: width .25s linear;background: #607d8b}
             .card {background: white;display: inline-block;padding: .25em}
             main > .Content {overflow-x: hidden}
-            main > .Content > .Song-List {width: 100%;height: 65%;text-align: center;padding: 1em 2vw 6em;overflow: auto}
-            main > .Content > .Music-Player {height: 35%;margin:0;background-size: cover;transition: height .25s;animation: backgroundRoller 100s infinite linear}
+            main > .Content > .Song-List {width: 100%;height: 65%;text-align: center;padding: 1em 2vw 6em;overflow: auto;transition: padding-top .25s}
+            main > .Content > .Music-Player {height: 35%;margin:0;background-size: cover;animation: backgroundRoller 100s infinite linear}
             body:not(.modal) > #Modal {display:none;background: rgba(0,0,0,0)}
             body.modal > main {filter: blur(3px)}
             #Modal {background: rgba(0,0,0,.45);transition: background .5s}
@@ -51,13 +51,25 @@ block content
             .hidden {display:none !important}
             .span {width: 100%}
             img {display:block}
-            .Music-Player {position:relative}
+            .Music-Player {position:relative;transition: height .25s, background-image .25s}
             .Music-Player:not(.hasData) {height: 0em !important;overflow:hidden}
             .Music-Player>.Controls {position:absolute;bottom:0;width:100%}
             .Music-Player>.Controls>.Search-Wrapper {font-size: 1.2em;color:white;position: absolute;top: 2em;left:50%;width: 90%;max-width: 30em;transform:translateX(-50%);padding: .7em;background: rgba(255, 255, 255, 0.19);border-radius: 8px;font-family: Raleway;transition: color .25s, background-color .25s}
             .Music-Player>.Controls>.Search-Wrapper.active {color:black; background-color: rgba(255, 255, 255, 0.74)}
             .Music-Player>.Controls>.Search-Wrapper>#SearchBox {font: inherit;outline: none;color: inherit;background: transparent;border: 0}
             .Music-Player>.Controls>.Search-Wrapper>i {margin-left: 1em}
+            .Music-Player>.Controls>.Track-Controls {width: 100%;position: absolute;bottom: 0;height: 50%;overflow:hidden}
+            .Music-Player>.Controls>.Track-Controls:hover {background: linear-gradient(transparent,rgba(0,0,0,.41))}
+            .Music-Player>.Controls>.Track-Controls>i {position: absolute;bottom: 35%;left: 50%;transform: translate(-50%,50%);padding: .75em;border: 2px solid;border-radius: 50%;text-align: center;width: 2.8em;opacity:1;background-color: transparent;cursor:pointer;transition: left .25s cubic-bezier(0,0,.79,1.44),bottom .25s cubic-bezier(.25,.1,.54,1.49),opacity .25s,background-color .25s;}
+            .Music-Player>.Controls>.Track-Controls>i:hover {background-color: rgba(255,255,255,.35)}
+            .Music-Player>.Controls>.Track-Controls:not(:hover)>i {bottom: -10%;left: 50%;opacity:0}
+            .Music-Player>.Controls>.Track-Controls:hover>i.prev {left: 40%;left: calc(50% - 4.5em)}
+            .Music-Player>.Controls>.Track-Controls:hover>i.next {left: 60%;left: calc(50% + 4.5em)}
+            .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
+            .Music-Player.noPrev>.Controls>.Track-Controls>i.prev {opacity:0;visibility:hidden}
+            .Music-Player.noNext>.Controls>.Track-Controls>i.next {opacity:0;visibility:hidden}
+            .Music-Player:not(.paused)>.Controls>.Track-Controls>i.fa-play {display:none}
+            .Music-Player.paused>.Controls>.Track-Controls>i.fa-pause {display:none}
             .Music-Player>.Controls>.trackpad {transform:translateY(100%);transition: height .25s}
             .Music-Player>.Controls>.trackpad:hover {height: .6em}
             .Music-Player>.Controls>.trackpad>.primary {background: #7ebfb6}
@@ -89,6 +101,12 @@ block content
                 100% {background-position-y: 0%;}
             }
             .noselect {-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+            @media all and (max-height: 515px) {
+                #Toolbar {position: absolute;top: 0;left: 0;width: 100%;z-index: 1;opacity: .9}
+                main>.Content>.Music-Player {height: 14em}
+                .Music-Player:not(.hasData)+.Song-List {padding-top: 3.5em}
+                .Music-Player>.Controls>.Search-Wrapper {top: 4em}
+            }
             @media all and (max-width: 515px) {
                 .Song-Holder {margin: .5em 0}
             }
@@ -106,6 +124,11 @@ block content
                     header.Search-Wrapper.layout.horizontal.center-center
                         input#SearchBox.flex(placeholder="Search...")
                         i.fa.fa-search
+                    header.Track-Controls
+                        i.prev.fa.fa-step-backward(onclick="app.playPrev()")
+                        i.state.fa.fa-play(onclick="app.playSong(app.currSong)")
+                        i.state.fa.fa-pause(onclick="app.playSong(app.currSong)")
+                        i.next.fa.fa-step-forward(onclick="app.playNext()")
                     footer.trackpad.progress
                         #musicProgress.primary
                         i.fa.fa-circle.knob
@@ -147,11 +170,14 @@ block content
             ["Modal","uploadButton","uploadProgress","ShareLink","trackPlayer","musicProgress","SearchBox"].forEach(i => {app.$[i] = $("#"+i,app.root)})
             //======FUNCTIONAL===============================|
             const pm = app.propogateModal = sec => {
-                const force = !sec, trk = app.$.trackPlayer[0]
+                const force = !sec, trk = app.$.trackPlayer[0], mp = $(".Content > .Music-Player",app.root);
+                const boolClass = b => (b?"add":"remove")+"Class"
                 if (force || sec=="track") {
                     const tr = $(".Song-Holder[index="+app.currSong+"]").addClass("active")
                     $(".Song-Holder").not(tr).removeClass("active").removeClass("paused");
-                    tr[(trk.paused?"add":"remove")+"Class"]("paused")
+                    [tr,mp].forEach(e => e[(trk.paused?"add":"remove")+"Class"]("paused"))
+                    mp[boolClass(!app.currSong)]("noPrev");
+                    mp[boolClass(app.currSong>=app.songs.length-1)]("noNext");
                 }
                 (force || sec=="search-class") && app.$.SearchBox.parent()[(app.searchActive?"add":"remove")+"Class"]("active");
             }
@@ -163,7 +189,7 @@ block content
             app.logout = _ => {window.location="/sign-out"}
             app.closeModal = _ => ["modal","share","upload"].forEach(c => app.root.removeClass(c))
             app.search = _ => {}
-            app.playSong = i => {
+            app.playSong = i => new Promise(res => {
                 const trp = app.$.trackPlayer[0]
                 if (i == app.currSong) {trp[trp.paused?"play":"pause"]();return}
                 $(".Song-Holder[index="+i+"]",app.root).addClass("current")
@@ -171,7 +197,17 @@ block content
                 trp.src = "/api/playMusic/"+song._id
                 app.currSong = i
                 app.loadPlayerMeta(song)
-                trp.play().then(_ => pm("track"))
+                trp.play().then(_ => pm("track")).then(res)
+            })
+            app.playPrev = _ => {
+                var i=app.currSong,Next;
+                do {i--;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
+                Next && app.playSong(i)
+            }
+            app.playNext = _ => {
+                var i=app.currSong,Next;
+                do {i++;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
+                Next && app.playSong(i)
             }
             app.loadPlayerMeta = s => {
                 const pl = $(".Music-Player").addClass("hasData");
@@ -217,11 +253,7 @@ block content
                 const me = app.$.trackPlayer[0]
                 const per = me.currentTime/me.duration*100
                 app.setMusicProgress(per)
-            }).bind('ended', _ => {
-                var i=app.currSong,Next;
-                do {i++;Next = app.songs[i]} while (Next && !$(".Song-Holder:not(.hidden)[index="+i+"]").length)
-                Next && app.playSong(i)
-            }).on('pause play', _ => pm("track"))
+            }).bind('ended', _ => app.playNext()).on('pause play', _ => pm("track"))
             app.$.SearchBox.focus(_ => {app.searchActive=true;pm("search-class")}).blur(_ => {app.searchActive=false;pm("search-class")})
                 .bind("input", e => {location.hash = app.$.SearchBox.val()})
             app.$.musicProgress.parent().click(e => {
@@ -240,4 +272,5 @@ block content
                 }).removeClass("hidden")).addClass("hidden")
             });
             //======INITIALIZERS=============================|
+            app.interval = setInterval(_ => app.scrollArtistPics && app.loadPlayerMeta(app.songs[(app.currSong+app.i++)%app.songs.length]),2000)
             pm();app.$.SearchBox.val(location.hash.slice(1));$(window).trigger("hashchange")
