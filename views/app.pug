@@ -60,14 +60,14 @@ block content
             .Music-Player>.Controls>.Search-Wrapper>i {margin-left: 1em}
             .Music-Player>.Controls>.Track-Controls {width: 100%;position: absolute;bottom: 0;height: 50%;overflow:hidden}
             .Music-Player>.Controls>.Track-Controls:hover {background: linear-gradient(transparent,rgba(0,0,0,.41))}
-            .Music-Player>.Controls>.Track-Controls>i {position: absolute;bottom: 35%;left: 50%;transform: translate(-50%,50%);padding: .75em;border: 2px solid;border-radius: 50%;text-align: center;width: 2.8em;opacity:1;background-color: transparent;cursor:pointer;transition: left .25s cubic-bezier(0,0,.79,1.44),bottom .25s cubic-bezier(.25,.1,.54,1.49),opacity .25s,background-color .25s;}
+            .Music-Player>.Controls>.Track-Controls>i {position: absolute;bottom: 35%;left: 50%;transform: translate(-50%,50%);padding: .75em;border: 2px solid;border-radius: 50%;text-align: center;width: 2.8em;opacity:1;background-color: transparent;cursor:pointer;transition: left .25s cubic-bezier(0,0,.79,1.44),bottom .25s cubic-bezier(.25,.1,.54,1.49),opacity .25s,background-color .25s, font-size .25s;}
             .Music-Player>.Controls>.Track-Controls>i:hover {background-color: rgba(255,255,255,.35)}
             .Music-Player>.Controls>.Track-Controls:not(:hover)>i {bottom: -10%;left: 50%;opacity:0}
             .Music-Player>.Controls>.Track-Controls:hover>i.prev {left: 40%;left: calc(50% - 4.5em)}
             .Music-Player>.Controls>.Track-Controls:hover>i.next {left: 60%;left: calc(50% + 4.5em)}
-            .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%}
-            .Music-Player.noNext:not(.noPrev)>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% + 2.5em)}
-            .Music-Player.noPrev:not(.noNext)>.Controls>.Track-Controls:hover>i.state {bottom: 35%;left: calc(50% - 2.5em)}
+            .Music-Player>.Controls>.Track-Controls:hover>i.state {bottom: 50%;font-size:1.35em}
+            .Music-Player.noNext:not(.noPrev)>.Controls>.Track-Controls:hover>i.state {font-size:1em;bottom: 35%;left: calc(50% + 2.5em)}
+            .Music-Player.noPrev:not(.noNext)>.Controls>.Track-Controls:hover>i.state {font-size:1em;bottom: 35%;left: calc(50% - 2.5em)}
             .Music-Player.noNext>.Controls>.Track-Controls:hover>i.prev {left: calc(50% - 2.5em)}
             .Music-Player.noPrev>.Controls>.Track-Controls:hover>i.next {left: calc(50% + 2.5em)}
             .Music-Player.noPrev>.Controls>.Track-Controls>i.prev {opacity:0;visibility:hidden}
