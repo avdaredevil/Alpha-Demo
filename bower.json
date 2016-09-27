@@ -1,6 +1,6 @@
 {
-  "name": "alpha-demo",
-  "description": "Find Easy Classes for your College",
+  "name": "music-explorer",
+  "description": "Share and Upload music",
   "main": "app.js",
   "authors": [
     "Apoorv Verma [AP] <avdaredevil@gmail.com>"

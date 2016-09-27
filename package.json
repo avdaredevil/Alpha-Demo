@@ -1,7 +1,7 @@
 {
-  "name": "aplha-demo",
+  "name": "music-explorer",
   "version": "1.0.0",
-  "description": "Find the easiest classes",
+  "description": "Share and upload your music",
   "private": true,
   "main": "app.js",
   "scripts": {

@@ -35,7 +35,7 @@ block content
             .progress > .primary {display: inline-block;position: absolute;width: 0%;top: 0;left: 0;height: 100%;transition: width .25s linear;background: #607d8b}
             .card {background: white;display: inline-block;padding: .25em}
             main > .Content {overflow-x: hidden}
-            main > .Content > .Song-List {width: 100%;height: 65%;text-align: center;padding: 1em 2vw 6em;overflow: auto;transition: padding-top .25s}
+            main > .Content > .Song-List {width: 100%;height: 65%;overflow-x: hidden;text-align: center;padding: 1em 2vw 6em;overflow: auto;transition: padding-top .25s}
             main > .Content > .Music-Player {height: 35%;margin:0;background-size: cover;animation: backgroundRoller 100s infinite linear}
             body:not(.modal) > #Modal {display:none;background: rgba(0,0,0,0)}
             body.modal > main {filter: blur(3px)}
@@ -105,11 +105,9 @@ block content
                 100% {background-position-y: 0%;}
             }
             .noselect {-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-            @media all and (max-height: 515px) {
-                #Toolbar {position: absolute;top: 0;left: 0;width: 100%;z-index: 1;opacity: .9}
-                main>.Content>.Music-Player {height: 14em}
-                .Music-Player:not(.hasData)+.Song-List {padding-top: 3.5em}
-                .Music-Player>.Controls>.Search-Wrapper {top: 4em}
+            @media all and (max-height: 585px) {
+                main > .Content > .Music-Player {height: 18em}
+                main > .Content > .Song-List {height: 50%;overflow: initial}
             }
             @media all and (max-width: 515px) {
                 .Song-Holder {margin: .5em 0}
