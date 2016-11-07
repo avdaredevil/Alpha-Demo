@@ -17,7 +17,8 @@ Main Screen | Mobile View
 - Full authentication (end-to-end): Routes, Assets, Music Files, Pages
 - Uploaded User tracked [*Deleted user support*]
 - If music photo not available, use artist Picture instead
-#### Front-End
+
+> #### Front-End
 - Hand Coded Styles/Animations
 - Material Design
 - Responsive site
